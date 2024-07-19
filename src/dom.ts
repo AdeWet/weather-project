@@ -1,4 +1,4 @@
-import { WeatherObject } from "./utils";
+import { City, WeatherObject } from "./types";
 
 export function prepareMap() {
   const map = document.querySelector<HTMLDivElement>("#map-content");
@@ -60,5 +60,67 @@ export function displayWeeklyWeather(city: string, weather: WeatherObject[]) {
       weatherType.innerHTML = dayWeather.weatherType;
       weeklyContainer.append(weatherType);
     }
+  }
+}
+
+export function createAndRenderCitySkeleton(id: number) {
+  const skeletonContainer = document.querySelector<HTMLDivElement>("#cities");
+
+  if (skeletonContainer) {
+    const skeleton = document.createElement("div");
+    skeleton.className =
+      "h-full px-4 grid grid-rows-2 grid-cols-2 animate-pulse bg-white rounded-lg shadow";
+    skeleton.id = `city${id}`;
+    const bodySkeletonType1 = document.createElement("div");
+    bodySkeletonType1.className =
+      "col-span-full h-1/5 w-2/5 self-center bg-primary rounded-full";
+
+    const bodySkeletonType2 = document.createElement("div");
+    bodySkeletonType2.className = "h-1/5 bg-primary rounded-full";
+
+    const bodySkeletonType3 = document.createElement("div");
+    bodySkeletonType3.className =
+      "h-1/5 w-4/5 bg-primary rounded-full justify-self-end";
+
+    skeleton.append(bodySkeletonType1);
+    skeleton.append(bodySkeletonType2);
+    skeleton.append(bodySkeletonType3);
+    skeletonContainer.append(skeleton);
+  }
+}
+
+export function createAndRenderCity(
+  city: City,
+  id: number,
+  weather: WeatherObject[]
+) {
+  const cities = document.querySelector<HTMLDivElement>("#cities");
+  const cityContainer = document.querySelector<HTMLDivElement>(`#city${id}`);
+
+  if (cities && cityContainer) {
+    cityContainer.innerHTML = "";
+    cityContainer.className =
+      "h-full px-4 grid grid-rows-2 grid-cols-2 bg-white rounded-lg shadow hover:bg-primary hover:text-white hover:cursor-pointer";
+
+    const cityName = document.createElement("div");
+    cityName.className =
+      "col-span-full self-center font-light border-b-2 border-secondary text-lg lg:text-2xl";
+    cityName.innerHTML = city.name;
+    const temperature = document.createElement("div");
+    temperature.className = "text-2xl font-semibold lg:text-3xl";
+    temperature.innerHTML = weather[0].temperature;
+    const weatherType = document.createElement("div");
+    weatherType.className = "justify-self-end text-xl font-light lg:text-2xl";
+    weatherType.innerHTML = weather[0].weatherType;
+
+    cityContainer.append(cityName);
+    cityContainer.append(temperature);
+    cityContainer.append(weatherType);
+
+    cityContainer.addEventListener("click", () => {
+      displayWeeklyWeather(city.name, weather);
+    });
+
+    cities.append(cityContainer);
   }
 }
