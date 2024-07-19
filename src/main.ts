@@ -1,13 +1,16 @@
 import { LeafletMouseEvent } from "leaflet";
 import { getWeather } from "./api";
+import { cities } from "./consts";
 import {
+  createAndRenderCity,
+  createAndRenderCitySkeleton,
   createAndRenderWeatherWeeklySkeleton,
   displayWeeklyWeather,
   prepareMap,
 } from "./dom";
 import { map, setDefaultMap, setMarker, setupCurrentLocationMap } from "./map";
 import "./style.css";
-import { Coordinates } from "./utils";
+import { Coordinates } from "./types";
 
 export function setupUserLocationPermission() {
   const yesButton = document.querySelector<HTMLButtonElement>("#yes-location");
@@ -40,6 +43,18 @@ function onMapClick(clickEvent: LeafletMouseEvent) {
   setMarker(coordinates);
 }
 
+function getCitiesWeather() {
+  for (let i = 0; i < cities.length; i++) {
+    createAndRenderCitySkeleton(i);
+  }
+  for (let i = 0; i < cities.length; i++) {
+    getWeather(cities[i].coordinates).then((weather) => {
+      createAndRenderCity(cities[i], i, weather);
+    });
+  }
+}
+
 map.on("click", onMapClick);
 
 setupUserLocationPermission();
+getCitiesWeather();
