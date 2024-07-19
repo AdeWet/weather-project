@@ -51,5 +51,5 @@ export function setMarker(coordinates: Coordinates) {
   customLocationMarker = L.marker([coordinates.lat, coordinates.lng]).addTo(
     map
   );
-  customLocationMarker.map.flyTo(coordinates);
+  map.flyTo(coordinates);
 }
