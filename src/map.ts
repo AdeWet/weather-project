@@ -1,5 +1,5 @@
 import * as L from "leaflet";
-import { Coordinates } from "./utils";
+import { Coordinates } from "./types";
 
 export const map = L.map("map");
 export let customLocationMarker = new L.Marker([300, 300]);

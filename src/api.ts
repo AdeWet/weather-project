@@ -1,4 +1,5 @@
-import { Coordinates, Weather, WeatherObject, weeklyWeather } from "./utils";
+import { Coordinates, Weather, WeatherObject } from "./types";
+import { weeklyWeather } from "./utils";
 
 export async function getWeather(
   coordinates: Coordinates
