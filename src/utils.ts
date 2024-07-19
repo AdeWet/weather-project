@@ -3,6 +3,8 @@ import { Weather, WeatherObject } from "./types";
 
 function weatherType(type: number): string {
   switch (type) {
+    case -1:
+      return "N/A";
     case 0:
       return "Clear";
     case 1:
@@ -52,10 +54,15 @@ export function weeklyWeather(weather: Weather): WeatherObject[] {
     currentHour = "0" + currentHour;
   }
   for (let i = 0; i < weather.hourly.time.length; i++) {
+    weather.hourly.time[i] ??= "";
     if (weather.hourly.time[i].endsWith(currentHour)) {
-      const day = new Date(weather.hourly.time[i]);
+      const dayNumber = new Date(weather.hourly.time[i]);
+      let day: string = Day[dayNumber.getDay()];
+      day ??= "N/A";
+      weather.hourly.weather_code[i] ??= -1;
+      weather.hourly.temperature_2m[i] ??= -2000;
       const currentWeather: WeatherObject = {
-        day: Day[day.getDay()],
+        day: day,
         temperature: formatTemperature(weather.hourly.temperature_2m[i]),
         weatherType: weatherType(weather.hourly.weather_code[i]),
       };
@@ -66,5 +73,8 @@ export function weeklyWeather(weather: Weather): WeatherObject[] {
 }
 
 function formatTemperature(temperature: number): string {
+  if (temperature === -2000) {
+    return "N/A";
+  }
   return `${Math.round(temperature)}\xB0`;
 }
