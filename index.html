@@ -3,6 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="src/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Project</title>
   </head>
@@ -18,10 +29,32 @@
       <div
         class="h-full px-2 pt-14 pb-2 grid grid-rows-4 grid-cols-2 gap-2 -mt-12 lg:px-4 lg:pb-6 lg:pt-16"
       >
-        <div
-          id="map"
-          class="col-span-2 lg:col-span-1 lg:row-span-4 bg-white"
-        ></div>
+        <div id="map" class="col-span-2 lg:col-span-1 lg:row-span-4 bg-white">
+          <div
+            id="map-content"
+            class="h-full w-full p-2 flex justify-center items-center text-lg font-light"
+          >
+            <div
+              class="grid grid-rows-2 grid-cols-2 items-center bg-secondary rounded"
+            >
+              <div class="flex flex-wrap p-2 col-span-2 border-b border-white">
+                Allow the use of your current location?
+              </div>
+              <button
+                id="yes-location"
+                class="p-2 rounded-bl flex w-full justify-center items-center border-r border-white hover:bg-green hover:cursor-pointer hover:font-medium"
+              >
+                Yes
+              </button>
+              <button
+                id="no-location"
+                class="p-2 rounded-br flex w-full justify-center items-center hover:bg-red hover:cursor-pointer hover:font-medium"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div
           id="week-weather"
