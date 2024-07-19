@@ -8,7 +8,13 @@ import {
   displayWeeklyWeather,
   prepareMap,
 } from "./dom";
-import { map, setDefaultMap, setMarker, setupCurrentLocationMap } from "./map";
+import {
+  map,
+  setDefaultMap,
+  setMarker,
+  setPremadeListOfCities,
+  setupCurrentLocationMap,
+} from "./map";
 import "./style.css";
 import { Coordinates } from "./types";
 
@@ -26,7 +32,23 @@ export function setupUserLocationPermission() {
 
 function yesClicked() {
   prepareMap();
+  const lat = navigator.geolocation.getCurrentPosition(showWeekWeather);
   setupCurrentLocationMap();
+}
+
+function showWeekWeather(position: GeolocationPosition) {
+  const coordinates: Coordinates = {
+    lat: position.coords.latitude,
+    lng: position.coords.longitude,
+  };
+  getWeather(coordinates).then((weather) => {
+    displayWeeklyWeather(
+      `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
+        Math.round(coordinates.lng * 10) / 10
+      }`,
+      weather
+    );
+  });
 }
 
 function noClicked() {
@@ -38,7 +60,12 @@ function onMapClick(clickEvent: LeafletMouseEvent) {
   createAndRenderWeatherWeeklySkeleton();
   const coordinates: Coordinates = clickEvent.latlng;
   getWeather(coordinates).then((weather) => {
-    displayWeeklyWeather("Unknown", weather);
+    displayWeeklyWeather(
+      `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
+        Math.round(coordinates.lng * 10) / 10
+      }`,
+      weather
+    );
   });
   setMarker(coordinates);
 }
@@ -46,6 +73,7 @@ function onMapClick(clickEvent: LeafletMouseEvent) {
 function getCitiesWeather() {
   for (let i = 0; i < cities.length; i++) {
     createAndRenderCitySkeleton(i);
+    setPremadeListOfCities(cities);
   }
   for (let i = 0; i < cities.length; i++) {
     getWeather(cities[i].coordinates).then((weather) => {
