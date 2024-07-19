@@ -5,6 +5,7 @@ export const map = L.map("map");
 export let customLocationMarker = new L.Marker([300, 300]);
 
 export function setupCurrentLocationMap(): L.Map {
+  map.locate({ setView: true });
   navigator.geolocation.getCurrentPosition(showCurrentMarker);
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 12,
@@ -50,5 +51,5 @@ export function setMarker(coordinates: Coordinates) {
   customLocationMarker = L.marker([coordinates.lat, coordinates.lng]).addTo(
     map
   );
-  map.flyTo(coordinates);
+  customLocationMarker.map.flyTo(coordinates);
 }
