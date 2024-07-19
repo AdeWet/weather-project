@@ -108,9 +108,11 @@ export function createAndRenderCity(
     cityName.innerHTML = city.name;
     const temperature = document.createElement("div");
     temperature.className = "text-2xl font-semibold lg:text-3xl";
+    weather[0].temperature ??= "N/A";
     temperature.innerHTML = weather[0].temperature;
     const weatherType = document.createElement("div");
     weatherType.className = "justify-self-end text-xl font-light lg:text-2xl";
+    weather[0].weatherType ??= "N/A";
     weatherType.innerHTML = weather[0].weatherType;
 
     cityContainer.append(cityName);
