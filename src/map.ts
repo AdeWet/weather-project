@@ -1,10 +1,10 @@
 import * as L from "leaflet";
+import { Coordinates } from "./utils";
 
 export const map = L.map("map");
 export let customLocationMarker = new L.Marker([300, 300]);
 
 export function setupCurrentLocationMap(): L.Map {
-  console.log("here");
   navigator.geolocation.getCurrentPosition(showCurrentMarker);
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 12,
@@ -41,4 +41,14 @@ export function prepareMap() {
     map.innerHTML = "";
     map.remove;
   }
+}
+
+export function setMarker(coordinates: Coordinates) {
+  if (map.hasLayer(customLocationMarker)) {
+    map.removeLayer(customLocationMarker);
+  }
+  customLocationMarker = L.marker([coordinates.lat, coordinates.lng]).addTo(
+    map
+  );
+  map.flyTo(coordinates);
 }
