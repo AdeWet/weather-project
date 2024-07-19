@@ -1,4 +1,26 @@
-import { setupMap } from "./map";
+import { prepareMap } from "./dom";
+import { setDefaultMap, setupCurrentLocationMap } from "./map";
 import "./style.css";
 
-setupMap();
+export function setupUserLocationPermission() {
+  const yesButton = document.querySelector<HTMLButtonElement>("#yes-location");
+  const noButton = document.querySelector<HTMLButtonElement>("#no-location");
+
+  if (yesButton) {
+    yesButton.addEventListener("click", yesClicked);
+  }
+  if (noButton) {
+    noButton.addEventListener("click", noClicked);
+  }
+}
+
+function yesClicked() {
+  prepareMap();
+  setupCurrentLocationMap();
+}
+
+function noClicked() {
+  prepareMap();
+  setDefaultMap();
+}
+setupUserLocationPermission();
