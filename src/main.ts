@@ -32,7 +32,7 @@ export function setupUserLocationPermission() {
 
 function yesClicked() {
   prepareMap();
-  const lat = navigator.geolocation.getCurrentPosition(showWeekWeather);
+  navigator.geolocation.getCurrentPosition(showWeekWeather);
   setupCurrentLocationMap();
 }
 
