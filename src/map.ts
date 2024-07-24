@@ -1,5 +1,5 @@
 import * as L from "leaflet";
-import { Coordinates } from "./types";
+import { City, Coordinates } from "./types";
 
 export const map = L.map("map");
 export let customLocationMarker = new L.Marker([300, 300]);
@@ -25,9 +25,6 @@ export function setDefaultMap(): L.Map {
 
 function showCurrentMarker(position: GeolocationPosition) {
   map.locate({ setView: true });
-  if (map.hasLayer(customLocationMarker)) {
-    map.removeLayer(customLocationMarker);
-  }
   if (position.coords.latitude && position.coords.longitude) {
     customLocationMarker = L.marker([
       position.coords.latitude,
@@ -45,11 +42,13 @@ export function prepareMap() {
 }
 
 export function setMarker(coordinates: Coordinates) {
-  if (map.hasLayer(customLocationMarker)) {
-    map.removeLayer(customLocationMarker);
-  }
-  customLocationMarker = L.marker([coordinates.lat, coordinates.lng]).addTo(
-    map
-  );
+  customLocationMarker.setLatLng(coordinates);
   map.flyTo(coordinates);
+}
+
+export function setPremadeListOfCities(cities: City[]) {
+  for (const city of cities) {
+    const marker = new L.Marker([city.coordinates.lat, city.coordinates.lng]);
+    marker.addTo(map);
+  }
 }
