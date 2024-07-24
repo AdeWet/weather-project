@@ -40,14 +40,16 @@ function showWeekWeather(position: GeolocationPosition) {
     lat: position.coords.latitude,
     lng: position.coords.longitude,
   };
-  getWeather(coordinates).then((weather) => {
-    displayWeeklyWeather(
-      `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
-        Math.round(coordinates.lng * 10) / 10
-      }`,
-      weather
-    );
-  });
+  getWeather(coordinates)
+    .then((weather) => {
+      displayWeeklyWeather(
+        `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
+          Math.round(coordinates.lng * 10) / 10
+        }`,
+        weather
+      );
+    })
+    .catch(console.error);
 }
 
 function handleNoButtonClick() {
@@ -58,14 +60,16 @@ function handleNoButtonClick() {
 function onMapClick(clickEvent: LeafletMouseEvent) {
   createAndRenderWeatherWeeklySkeleton();
   const coordinates: Coordinates = clickEvent.latlng;
-  getWeather(coordinates).then((weather) => {
-    displayWeeklyWeather(
-      `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
-        Math.round(coordinates.lng * 10) / 10
-      }`,
-      weather
-    );
-  });
+  getWeather(coordinates)
+    .then((weather) => {
+      displayWeeklyWeather(
+        `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
+          Math.round(coordinates.lng * 10) / 10
+        }`,
+        weather
+      );
+    })
+    .catch(console.error);
   setMarker(coordinates);
 }
 
@@ -75,9 +79,11 @@ function getCitiesWeather() {
     setPremadeListOfCities(cities);
   }
   for (let i = 0; i < cities.length; i++) {
-    getWeather(cities[i].coordinates).then((weather) => {
-      createAndRenderCity(cities[i], i, weather);
-    });
+    getWeather(cities[i].coordinates)
+      .then((weather) => {
+        createAndRenderCity(cities[i], i, weather);
+      })
+      .catch(console.error);
   }
 }
 
