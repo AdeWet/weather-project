@@ -10,10 +10,9 @@ import {
 } from "./dom";
 import {
   map,
-  setDefaultMap,
   setMarker,
   setPremadeListOfCities,
-  setupCurrentLocationMap,
+  setupLocationMap,
 } from "./map";
 import "./style.css";
 import { Coordinates } from "./types";
@@ -23,17 +22,17 @@ export function setupUserLocationPermission() {
   const noButton = document.querySelector<HTMLButtonElement>("#no-location");
 
   if (yesButton) {
-    yesButton.addEventListener("click", yesClicked);
+    yesButton.addEventListener("click", handleYesButtonClick);
   }
   if (noButton) {
-    noButton.addEventListener("click", noClicked);
+    noButton.addEventListener("click", handleNoButtonClick);
   }
 }
 
-function yesClicked() {
+function handleYesButtonClick() {
   prepareMap();
-  const lat = navigator.geolocation.getCurrentPosition(showWeekWeather);
-  setupCurrentLocationMap();
+  navigator.geolocation.getCurrentPosition(showWeekWeather);
+  navigator.geolocation.getCurrentPosition(setupLocationMap);
 }
 
 function showWeekWeather(position: GeolocationPosition) {
@@ -41,32 +40,36 @@ function showWeekWeather(position: GeolocationPosition) {
     lat: position.coords.latitude,
     lng: position.coords.longitude,
   };
-  getWeather(coordinates).then((weather) => {
-    displayWeeklyWeather(
-      `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
-        Math.round(coordinates.lng * 10) / 10
-      }`,
-      weather
-    );
-  });
+  getWeather(coordinates)
+    .then((weather) => {
+      displayWeeklyWeather(
+        `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
+          Math.round(coordinates.lng * 10) / 10
+        }`,
+        weather
+      );
+    })
+    .catch(console.error);
 }
 
-function noClicked() {
+function handleNoButtonClick() {
   prepareMap();
-  setDefaultMap();
+  setupLocationMap();
 }
 
 function onMapClick(clickEvent: LeafletMouseEvent) {
   createAndRenderWeatherWeeklySkeleton();
   const coordinates: Coordinates = clickEvent.latlng;
-  getWeather(coordinates).then((weather) => {
-    displayWeeklyWeather(
-      `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
-        Math.round(coordinates.lng * 10) / 10
-      }`,
-      weather
-    );
-  });
+  getWeather(coordinates)
+    .then((weather) => {
+      displayWeeklyWeather(
+        `Unknown:${Math.round(coordinates.lat * 10) / 10}, ${
+          Math.round(coordinates.lng * 10) / 10
+        }`,
+        weather
+      );
+    })
+    .catch(console.error);
   setMarker(coordinates);
 }
 
@@ -76,9 +79,11 @@ function getCitiesWeather() {
     setPremadeListOfCities(cities);
   }
   for (let i = 0; i < cities.length; i++) {
-    getWeather(cities[i].coordinates).then((weather) => {
-      createAndRenderCity(cities[i], i, weather);
-    });
+    getWeather(cities[i].coordinates)
+      .then((weather) => {
+        createAndRenderCity(cities[i], i, weather);
+      })
+      .catch(console.error);
   }
 }
 
