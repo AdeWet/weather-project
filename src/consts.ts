@@ -1,4 +1,4 @@
-import { City } from "./types";
+import { City, Coordinates } from "./types";
 
 const Durban: City = {
   name: "Durban",
@@ -31,3 +31,8 @@ export enum Day {
   Fri,
   Sat,
 }
+
+export const defaultCoordinates: Coordinates = {
+  lat: -26.2,
+  lng: 28.03,
+};

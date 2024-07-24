@@ -10,10 +10,9 @@ import {
 } from "./dom";
 import {
   map,
-  setDefaultMap,
   setMarker,
   setPremadeListOfCities,
-  setupCurrentLocationMap,
+  setupLocationMap,
 } from "./map";
 import "./style.css";
 import { Coordinates } from "./types";
@@ -23,17 +22,17 @@ export function setupUserLocationPermission() {
   const noButton = document.querySelector<HTMLButtonElement>("#no-location");
 
   if (yesButton) {
-    yesButton.addEventListener("click", yesClicked);
+    yesButton.addEventListener("click", handleYesButtonClick);
   }
   if (noButton) {
-    noButton.addEventListener("click", noClicked);
+    noButton.addEventListener("click", handleNoButtonClick);
   }
 }
 
-function yesClicked() {
+function handleYesButtonClick() {
   prepareMap();
   navigator.geolocation.getCurrentPosition(showWeekWeather);
-  setupCurrentLocationMap();
+  navigator.geolocation.getCurrentPosition(setupLocationMap);
 }
 
 function showWeekWeather(position: GeolocationPosition) {
@@ -51,9 +50,9 @@ function showWeekWeather(position: GeolocationPosition) {
   });
 }
 
-function noClicked() {
+function handleNoButtonClick() {
   prepareMap();
-  setDefaultMap();
+  setupLocationMap();
 }
 
 function onMapClick(clickEvent: LeafletMouseEvent) {
