@@ -97,32 +97,34 @@ export function createAndRenderCity(
   const cities = document.querySelector<HTMLDivElement>("#cities");
   const cityContainer = document.querySelector<HTMLDivElement>(`#city${id}`);
 
-  if (cities && cityContainer) {
-    cityContainer.innerHTML = "";
-    cityContainer.className =
-      "h-full px-4 grid grid-rows-2 grid-cols-2 bg-white rounded-lg shadow hover:bg-primary hover:text-white hover:cursor-pointer";
-
-    const cityName = document.createElement("div");
-    cityName.className =
-      "col-span-full self-center font-light border-b-2 border-secondary text-lg lg:text-2xl";
-    cityName.innerHTML = city.name;
-    const temperature = document.createElement("div");
-    temperature.className = "text-2xl font-semibold lg:text-3xl";
-    weather[0].temperature ??= "N/A";
-    temperature.innerHTML = weather[0].temperature;
-    const weatherType = document.createElement("div");
-    weatherType.className = "justify-self-end text-xl font-light lg:text-2xl";
-    weather[0].weatherType ??= "N/A";
-    weatherType.innerHTML = weather[0].weatherType;
-
-    cityContainer.append(cityName);
-    cityContainer.append(temperature);
-    cityContainer.append(weatherType);
-
-    cityContainer.addEventListener("click", () => {
-      displayWeeklyWeather(city.name, weather);
-    });
-
-    cities.append(cityContainer);
+  if (!cities || !cityContainer || !weather.length) {
+    return;
   }
+
+  cityContainer.innerHTML = "";
+  cityContainer.className =
+    "h-full px-4 grid grid-rows-2 grid-cols-2 bg-white rounded-lg shadow hover:bg-primary hover:text-white hover:cursor-pointer";
+
+  const cityName = document.createElement("div");
+  cityName.className =
+    "col-span-full self-center font-light border-b-2 border-secondary text-lg lg:text-2xl";
+  cityName.innerHTML = city.name;
+  const temperature = document.createElement("div");
+  temperature.className = "text-2xl font-semibold lg:text-3xl";
+  weather[0].temperature ??= "N/A";
+  temperature.innerHTML = weather[0].temperature;
+  const weatherType = document.createElement("div");
+  weatherType.className = "justify-self-end text-xl font-light lg:text-2xl";
+  weather[0].weatherType ??= "N/A";
+  weatherType.innerHTML = weather[0].weatherType;
+
+  cityContainer.append(cityName);
+  cityContainer.append(temperature);
+  cityContainer.append(weatherType);
+
+  cityContainer.addEventListener("click", () => {
+    displayWeeklyWeather(city.name, weather);
+  });
+
+  cities.append(cityContainer);
 }

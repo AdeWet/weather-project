@@ -48,11 +48,21 @@ function weatherType(type: number): string {
 
 export function weeklyWeather(weather: Weather): WeatherObject[] {
   const weeklyWeather: WeatherObject[] = [];
+
+  if (
+    !weather.hourly.time.length ||
+    !weather.hourly.temperature_2m.length ||
+    !weather.hourly.weather_code.length
+  ) {
+    return weeklyWeather;
+  }
+
   const currentDate = new Date();
   let currentHour = `${currentDate.getHours()}:00`;
   if (currentHour.length === 4) {
     currentHour = "0" + currentHour;
   }
+
   for (let i = 0; i < weather.hourly.time.length; i++) {
     weather.hourly.time[i] ??= "";
     if (weather.hourly.time[i].endsWith(currentHour)) {

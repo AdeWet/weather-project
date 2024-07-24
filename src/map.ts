@@ -1,44 +1,31 @@
 import * as L from "leaflet";
+import { defaultCoordinates } from "./consts";
 import { City, Coordinates } from "./types";
 
 export const map = L.map("map");
-export let customLocationMarker = new L.Marker([300, 300]);
+export let customLocationMarker = new L.Marker([45, 45]).addTo(map);
 
-export function setupCurrentLocationMap(): L.Map {
-  map.locate({ setView: true });
-  navigator.geolocation.getCurrentPosition(showCurrentMarker);
+export function setupLocationMap(position?: GeolocationPosition): L.Map {
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 12,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"></a>',
   }).addTo(map);
-  return map;
-}
 
-export function setDefaultMap(): L.Map {
-  map.setView([-26.2, 28.03], 12);
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 12,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright"></a>',
-  }).addTo(map);
-  return map;
-}
+  let coordinates: Coordinates;
 
-function showCurrentMarker(position: GeolocationPosition) {
-  map.locate({ setView: true });
-  if (position.coords.latitude && position.coords.longitude) {
-    customLocationMarker = L.marker([
-      position.coords.latitude,
-      position.coords.longitude,
-    ]).addTo(map);
+  if (position?.coords.latitude && position?.coords.longitude) {
+    coordinates = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    };
+  } else {
+    coordinates = defaultCoordinates;
   }
-}
 
-export function prepareMap() {
-  const map = document.querySelector<HTMLDivElement>("#map-content");
-  if (map) {
-    map.innerHTML = "";
-    map.remove;
-  }
+  map.setView([coordinates.lat, coordinates.lng], 12);
+  setMarker(coordinates);
+
+  return map;
 }
 
 export function setMarker(coordinates: Coordinates) {
